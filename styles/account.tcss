@@ -1,0 +1,113 @@
+.changeAccount {
+    align: center middle;
+}
+
+#remove {
+    background: $background-lighten-1;
+    offset: 0 0;
+    border: solid $secondary;
+    height: auto;
+    display: none;
+}
+
+#bank {
+    width: 12;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#agency {
+    width: 9;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#name {
+    width: 37;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#balance {
+    width: 27;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+DataTable {
+    width: 100%;
+    align: center top;
+    background: $background-lighten-1;
+    border: round $secondary;
+    border-title-align: center;
+}
+
+DataTable .datatable--header {
+    background: $background-lighten-2;
+}
+
+DataTable .datatable--hover {
+    background: $background-lighten-1; 
+    text-style: bold;
+    color: $secondary;
+}
+
+DataTable .datatable--cursor {
+    background: $background-lighten-1;
+    color: $secondary;
+}
+
+#conf {
+    width: 100%;
+    align: center middle; 
+    grid-size: 3 3;
+    grid-rows: auto;
+    grid-columns: 15 15 30;
+    border-title-align: center;
+}
+
+#bankconf {
+    width: 15;
+    height: auto;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#agencyconf {
+    width: 15;
+    height: auto;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#valueconf {
+    width: 30;
+    height: auto;
+    border: solid $secondary;
+    border-title-align: center;
+    column-span: 2;
+}
+
+#result {
+    width: 30;
+    height: auto;
+    border: solid $secondary;
+    border-title-align: center;
+    text-align: center;
+}
+
+#balance {
+    width: 30;
+    height: auto;
+    border: solid $secondary;
+    border-title-align: center;
+    text-align: center;
+}
+
+#clearconf {
+    width: 60;
+    height: auto;
+    border: round $secondary;
+    background: $background-lighten-1;
+    column-span: 3;
+}

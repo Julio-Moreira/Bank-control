@@ -1,0 +1,96 @@
+LoadingIndicator{
+    width: 100%;
+    height: 100%;
+    color: $secondary;
+}
+
+#author {
+    dock: bottom;   
+    height: 5%; 
+    text-align: center;
+}
+
+.nav-menu {
+    width: 100%;
+    height: 95%;
+    align: center middle;   
+}
+
+.side-bar-grid {
+    grid-size: 1 4;
+    grid-rows: 2;
+    grid-columns: 1fr;
+    width: 32;
+    height: 11;
+    border: double $secondary;
+    background: $panel;
+    align: center middle;   
+}
+
+.side-bar-links {
+    text-align: center;
+    border: solid $secondary;
+    background: $background-lighten-1;
+    margin: 0;
+}
+
+.side-bar-button {
+    border: none;
+    background: $panel;
+}
+
+#sidebar-first {
+    background: $panel-darken-1;
+    width: 2;
+    height: 100%;
+}
+
+#sidebar-second-nav {
+    background: $panel;
+    width: auto;
+    height: 100%;
+}
+
+.sidebar-hoz {
+    dock: left;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+}
+
+.button-sidebar {
+    border: none;
+    text-align: left;
+}
+
+ExitScreen, RemoveAccountScreen, RemoveLaunchScreen {
+    align: center middle;
+}
+
+#dialog, #dialogl {
+    grid-size: 2;
+    grid-gutter: 1 2;
+    grid-rows: 1fr 3;
+    padding: 0 1;
+    width: 60;
+    height: 10;
+    border: double $secondary 80%;
+    background: $surface;
+}
+
+#question, #questionl {
+    column-span: 2;
+    height: 1fr;
+    width: 1fr;
+    content-align: center middle;
+}
+
+#quit, #cancel, #yes, #no, #yesl, #nol{
+    width: 100%;
+}
+
+.wip {
+    width: 100%;
+    height: 100%;
+    content-align: center middle;   
+}

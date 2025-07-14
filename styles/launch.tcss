@@ -1,0 +1,162 @@
+.addLaunch {
+    align: center middle;
+}
+
+.lineOne {
+    align: center bottom;
+    margin: 0;
+}
+
+.lineTwo {
+    align: center top;
+    margin: 0;
+}   
+
+.lineOneChanged {
+    align: center bottom;
+    margin: 0;
+}
+
+.lineTwoChanged {
+    align: center top;
+    margin: 0;
+    height: auto;
+}   
+
+.lineTreeChanged {
+    align: center top;
+    margin: 0;
+}
+
+#bank, #bankChange {
+    width: 11;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#agencyLn, #agencyChange {
+    width: 10;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#checkChange {
+    width: 7;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#type, #typeChange {
+    width: 9;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#number, #numberChange {
+    width: 21;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#emissionDate, #emissionDateChange {
+    width: 22;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#value, #valueChange {
+    width: 50;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#history {
+    width: 37;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#historyChange {
+    width: 44;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+.filters {
+    margin: 0;
+    content-align: center middle;
+    align: center middle;
+    border: blank $secondary; 
+    background: $background-lighten-1;
+    width: 100%;
+    height: auto;
+    border-title-align: center;
+}
+
+#balanceFilter {
+    width: 30;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#agencyFilter {
+    width: 9;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#typFilter {
+    width: 10;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#sitFilter {
+    width: 10;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#ticFilter {
+    width: 10;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#numberFilter {
+    width: 30;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#valueFilter {
+    width: 33;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#bankFilter {
+    width: 11;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#emDateFilter, #mvDateFilter {
+    width: 24;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
+#clearFilters {
+    background: $background-lighten-1;
+    border: solid $secondary;
+    width: 1;
+}
+
+#removeLaunch {
+    background: $background-lighten-1;
+    border: solid $secondary;
+    width: 88;
+    align: center top;
+    content-align: center top;
+}
