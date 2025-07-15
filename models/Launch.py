@@ -113,7 +113,7 @@ class Launch:
 
     def getAllLaunches(self):
         return self.db.fetchall("SELECT id, Bank, Agency, Typ, Number, ValueIntPart, ValueDecimalPart, History, Situation, IsChecked, MovimentDay, MovimentMonth, MovimentYear, EmissionDay, EmissionMonth, EmissionYear FROM Launch")
-    
+
     def getLaunch(self, number, agency, bank):
         res = self.db.fetchall("""
             SELECT Typ, ValueIntPart, ValueDecimalPart, History, IsChecked, EmissionDay, EmissionMonth, EmissionYear

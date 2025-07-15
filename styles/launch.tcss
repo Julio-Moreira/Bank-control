@@ -160,3 +160,58 @@
     align: center top;
     content-align: center top;
 }
+
+#ticScreen {
+    align: center top;
+}
+
+#inputsTic {
+    height: auto;
+    width: 100%;
+    align: center middle;
+}
+
+.inputtic {
+    border: solid $secondary;
+    border-title-align: center;
+    background: $background-lighten-1;
+}
+
+#bankTic {
+    width: 11;
+}
+
+#agTic {
+    width: 9;
+}
+
+#numberTic {
+    width: 30;
+}
+
+#selectTic {
+    width: 50;
+    border: $secondary;
+    background: $background-lighten-1;
+}
+
+#addTic {
+    width: 25;
+    height: 3;
+    background: $background-lighten-1;
+    border: $secondary-darken-3;
+}
+
+#clearTic {
+    width: 10;
+    height: 3;
+    background: $background-lighten-1;
+    border: $secondary-darken-3;
+}
+
+#confirmTic {
+    width: 100%;
+    height: 3;
+    background: $background-lighten-1;
+    border: round $secondary-darken-3;
+}

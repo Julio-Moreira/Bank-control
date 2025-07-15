@@ -7,7 +7,7 @@ from textual.message import Message
 
 
 from widgets.SideBar import SideBar
-import widgets.Launch.changeLaunch, widgets.Launch.includeLaunch, widgets.Launch.listLaunch 
+import widgets.Launch.changeLaunch, widgets.Launch.includeLaunch, widgets.Launch.listLaunch, widgets.Launch.ticLaunch
 
 class LaunchScreen(Screen):
     BINDINGS = [
@@ -23,4 +23,6 @@ class LaunchScreen(Screen):
                 yield  widgets.Launch.includeLaunch.IncludeLaunch()
             with TabPane("Alteração"):
                 yield widgets.Launch.changeLaunch.ChangeLaunch()
+            with TabPane("Ações"):
+                yield widgets.Launch.ticLaunch.TicLaunch()
         yield Footer()

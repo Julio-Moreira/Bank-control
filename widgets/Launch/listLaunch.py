@@ -18,13 +18,13 @@ class ListLaunch(Static):
                     yield Input(placeholder="> **/**/**", max_length=33, type="text", id="mvDateFilter", classes="inputfilters")
                     yield Input(placeholder="> **/**/**", max_length=33, type="text", id="emDateFilter", classes="inputfilters")
                     yield Button("[red bold] X [/] ", id="clearFilters", classes="hidden")
-            yield DataTable()
+            yield DataTable(id="ListLaunchTable")
 
 
     def _on_mount(self, event):
         self.sortAscending = True
         self.sortColumn = None
-        self.table = self.app.query_one(DataTable)
+        self.table = self.app.query_one("#ListLaunchTable")
         self.table.border_title = "Lista de lançamentos"
         self.table.add_column(Text("Banco", style="bold", justify="center"), key="bank")
         self.table.add_column(Text("+", style="yellow"), key="sep1", width=1)
