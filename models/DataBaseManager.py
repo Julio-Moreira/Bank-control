@@ -54,6 +54,7 @@ class DatabaseManager():
                 # FOREIGN KEY (Bank) REFERENCES Account(Bank)
     
     def execute(self, query, params=None):
+        print(query,params)
         if params is None:
             params = []
         self.cursor.execute(query, params)

@@ -2,19 +2,28 @@
     align: center middle;
 }
 
+.lineZero {
+    align: center middle;
+    margin: 1;
+    height: 3;
+}
+
 .lineOne {
-    align: center bottom;
+    align: center middle;
     margin: 0;
+    height: 3;
 }
 
 .lineTwo {
     align: center top;
     margin: 0;
+    height: 3;
 }   
 
 .lineOneChanged {
     align: center bottom;
     margin: 0;
+    height: 3;
 }
 
 .lineTwoChanged {
@@ -23,13 +32,35 @@
     height: auto;
 }   
 
+.lineTree {
+    align: center top;
+    margin: 0;
+    padding: 0;
+    height: auto;
+} 
+
 .lineTreeChanged {
     align: center top;
     margin: 0;
+    height: auto;
+}
+
+#addBtnLaunch {
+    width: 71;
+    border: round $secondary;
+    border-title-align: center;
+    background: $background-lighten-1;
+}
+
+#changeLaunch {
+    width: 77;
+    border: round $secondary;
+    border-title-align: center;
+    background: $background-lighten-1;
 }
 
 #bank, #bankChange {
-    width: 11;
+    width: 12;
     border: solid $secondary;
     border-title-align: center;
 }
@@ -53,7 +84,7 @@
 }
 
 #number, #numberChange {
-    width: 21;
+    width: 20;
     border: solid $secondary;
     border-title-align: center;
 }
@@ -64,20 +95,26 @@
     border-title-align: center;
 }
 
-#value, #valueChange {
+#valueChange {
     width: 50;
     border: solid $secondary;
     border-title-align: center;
 }
 
+#value {
+    width: 51;
+    border: solid $secondary;
+    border-title-align: center;
+}
+
 #history {
-    width: 37;
+    width: 40;
     border: solid $secondary;
     border-title-align: center;
 }
 
 #historyChange {
-    width: 44;
+    width: 46;
     border: solid $secondary;
     border-title-align: center;
 }
@@ -155,8 +192,8 @@
 
 #removeLaunch {
     background: $background-lighten-1;
-    border: solid $secondary;
-    width: 88;
+    border: round $secondary;
+    width: 39;
     align: center top;
     content-align: center top;
 }
@@ -207,6 +244,7 @@
     height: 3;
     background: $background-lighten-1;
     border: $secondary-darken-3;
+    display: none;
 }
 
 #confirmTic {
@@ -214,4 +252,36 @@
     height: 3;
     background: $background-lighten-1;
     border: round $secondary-darken-3;
+}
+
+#actualBalance {
+    border: solid $secondary;
+    border-title-align: center;
+    background: $background-lighten-1;
+    width: 25;
+    height: 3;
+}
+
+#futureBalance {
+    border: solid $secondary;
+    border-title-align: center;
+    background: $background-lighten-1;
+    width: 25;
+    height: 3;
+}
+
+#actualBalanceChange {
+    border: solid $secondary;
+    border-title-align: center;
+    background: $background-lighten-1;
+    width: 28;
+    height: 3;
+}
+
+#futureBalanceChange {
+    border: solid $secondary;
+    border-title-align: center;
+    background: $background-lighten-1;
+    width: 28;
+    height: 3;
 }

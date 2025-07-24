@@ -122,7 +122,7 @@ class Launch:
         """, [number, agency, bank])
         
         return res[0] if res else [''] * 8
-    
+
     def getAllLaunchNotReleased(self):
         return self.db.fetchall(
             """
@@ -165,3 +165,24 @@ class Launch:
             valueIntPart += valueDecimalPartEx
         
         return valueIntPart, int("{:02}".format(valueDecimalPart))
+    
+    def tic(self, ticOrnot, launches):
+        condicoes = []
+        parametros = [int(ticOrnot)]
+
+        for bank, agency, number in launches:
+            condicoes.append("(Bank = ? AND Agency = ? AND Number = ?)")
+            parametros.extend([bank, agency, number])
+
+        whereClause = " OR ".join(condicoes)
+
+        query = f"""
+            UPDATE Launch
+            SET IsChecked = ?
+            WHERE {whereClause}
+        """
+
+        self.db.execute(query, parametros)
+
+    def deleteAll(self, launches):
+        pass

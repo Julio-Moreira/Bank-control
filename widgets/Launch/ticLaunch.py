@@ -4,6 +4,9 @@ from rich.text import Text
 from textual.containers import HorizontalScroll, Vertical
 from textual.suggester import SuggestFromList
 
+from screens.TicConfirmScreen import TicConfirmScreen
+from widgets.Launch.listLaunch import ListLaunch
+
 from datetime import datetime
 
 
@@ -55,6 +58,7 @@ class TicLaunch(Static):
         self.refreshTable()
 
     @on(Button.Pressed, "#addTic")
+    @on(Input.Submitted)
     def addPressed(self):
         bank = self.app.query_one("#bankTic").value
         agency = self.app.query_one("#agTic").value
@@ -86,6 +90,23 @@ class TicLaunch(Static):
         self.app.query_one("#bankTic").value = ''
         self.app.query_one("#agTic").value = ''
         self.app.query_one("#numberTic").value = ''
+    
+    @on(Button.Pressed, "#confirmTic")
+    def confirmPressed(self):
+        def confirm(res) -> None:
+            match res:
+                case "T":
+                    self.app.LAUNCH.tic(True, [x[:3] for x in self.launches])
+                case "N":
+                    self.app.LAUNCH.tic(False, [x[:3] for x in self.launches])
+                case "D":
+                    self.app.LAUNCH.deleteAll([x[:3] for x in self.launches])
+
+            self.launches = []
+            self.refreshTable()
+            self.app.query_one(ListLaunch).refreshTable()
+
+        self.app.push_screen(TicConfirmScreen(), confirm)
 
     @on(Button.Pressed, "#clearTic")
     def clearPressed(self):
@@ -105,6 +126,9 @@ class TicLaunch(Static):
         self.table.loading = True
         
         if launches is None:    
+            clear = self.app.query_one("#clearTic")
+            clear.display = "none"
+
             self.table.add_row(
                 Text(f"***", style="bold", justify="center"), Text("+", style="bold yellow"),
                 Text(f"**", style="bold", justify="center"), Text("+", style="bold yellow"),
@@ -117,6 +141,9 @@ class TicLaunch(Static):
             self.table.loading = False
 
             return
+
+        clear = self.app.query_one("#clearTic")
+        clear.display = "block"
 
         if self.sortColumn is not None:
             launches.sort(key=lambda x: x[self.sortColumn], reverse=not self.sortAscending)
