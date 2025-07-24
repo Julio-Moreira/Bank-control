@@ -18,8 +18,10 @@ class Launch:
         self.db.execute(query, (bank, agency, typ, number, valueIntPart, valueDecimalPart, history, situation, IsChecked,
                                 movimentDay, movimentMonth, movimentYear, emissionDay, emissionMonth, emissionYear))
 
-    def editLaunch(self, bank, agency, typ, number, valueUnfiltred, history, IsChecked, situation, emissionDay, emissionMonth, emissionYear):
+    def editLaunch(self, bank, agency, typ, number, valueUnfiltred, history, IsChecked, situation, emissionDay, emissionMonth, emissionYear, account, launch):
         valueIntPart, valueDecimalPart = self.filterValue(valueUnfiltred)
+        self._revertLaunch(number, bank, agency, account, launch)
+        account.addBalance(bank, agency, float(f"{valueIntPart}.{valueDecimalPart}"))
 
         query = """
             UPDATE Launch
@@ -107,9 +109,18 @@ class Launch:
         
         return self.getAllLaunches()
 
-    def removeLaunch(self, number, bank, agency):
+    def removeLaunch(self, number, bank, agency, account, launch):
+        self._revertLaunch(number, bank, agency, account, launch)
+
         query = "DELETE FROM Launch WHERE Number = ? AND Bank = ? AND Agency = ?"
         self.db.execute(query, [number, bank, agency])
+
+    def _revertLaunch(self, number, bank, agency, account, launch):
+        situation, oldValueInt, oldValueDecimal = launch.getSituationAndValue(bank, agency, number)
+        oldValue = float(f"{oldValueInt}.{oldValueDecimal}")
+
+        if situation == 1:
+            account.addBalance(bank, agency, oldValue * (-1))
 
     def getAllLaunches(self):
         return self.db.fetchall("SELECT id, Bank, Agency, Typ, Number, ValueIntPart, ValueDecimalPart, History, Situation, IsChecked, MovimentDay, MovimentMonth, MovimentYear, EmissionDay, EmissionMonth, EmissionYear FROM Launch")
@@ -184,5 +195,22 @@ class Launch:
 
         self.db.execute(query, parametros)
 
-    def deleteAll(self, launches):
-        pass
+    def deleteLaunches(self, launches, account, launch):
+        condicoes = []
+        parametros = []
+
+        for bank, agency, number in launches:
+            condicoes.append("(Bank = ? AND Agency = ? AND Number = ?)")
+            parametros.extend([bank, agency, number])
+            self._revertLaunch(number, bank, agency, account, launch)
+
+
+        whereClause = " OR ".join(condicoes)
+
+        query = f"""
+            DELETE FROM Launch
+            WHERE {whereClause}
+        """
+
+        self.db.execute(query, parametros)
+            

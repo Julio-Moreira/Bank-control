@@ -155,7 +155,7 @@ class IncludeLaunch(Static):
         value = float(value)
 
         futureBalance = self.app.query_one("#futureBalance")
-        futureBalance.update(Text(f"R$ +{str(round(value+balance, 2)).replace(".",",")}", style="green") if (value+balance) >= 0  else Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="red"))
+        futureBalance.update(Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="green") if value >= 0  else Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="red"))
     
     def validateBank(self, bank):
         return bank.isdigit() and len(bank) == 3

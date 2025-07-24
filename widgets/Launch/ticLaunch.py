@@ -100,11 +100,15 @@ class TicLaunch(Static):
                 case "N":
                     self.app.LAUNCH.tic(False, [x[:3] for x in self.launches])
                 case "D":
-                    self.app.LAUNCH.deleteAll([x[:3] for x in self.launches])
+                    self.app.LAUNCH.deleteLaunches([x[:3] for x in self.launches], self.app.ACCOUNT, self.app.LAUNCH)
 
             self.launches = []
             self.refreshTable()
             self.app.query_one(ListLaunch).refreshTable()
+
+        if self.launches == []:
+            self.app.notify("Adicione algum lançamento para tomar alguma ação", severity="error")
+            return
 
         self.app.push_screen(TicConfirmScreen(), confirm)
 

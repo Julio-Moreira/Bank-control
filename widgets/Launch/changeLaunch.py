@@ -113,7 +113,7 @@ class ChangeLaunch(Static):
             if int(emissionYear) > currentYear or (int(emissionYear) == currentYear and (int(emissionMonth) > currentMonth or (int(emissionMonth) == currentMonth and int(emissionDay) > currentDay))):
                 situation = 0
 
-        self.app.LAUNCH.editLaunch(bank, agency, typ, number, value, history, IsChecked, situation, emissionDay, emissionMonth, emissionYear)
+        self.app.LAUNCH.editLaunch(bank, agency, typ, number, value, history, IsChecked, situation, emissionDay, emissionMonth, emissionYear, self.app.ACCOUNT, self.app.LAUNCH)
         self.app.notify(f"Lançamento {number} alterado com sucesso")
 
         self.app.query_one(ListLaunch).refreshTable()
@@ -158,17 +158,17 @@ class ChangeLaunch(Static):
             return
         
         balanceIntPart, balanceDecimalPart = self.app.ACCOUNT.getBalance(bank, agency)
-        balance = float(f"{balanceIntPart}.{balanceDecimalPart:02d}")
+        balance = float(f"{balanceIntPart}.{balanceDecimalPart}")
         value = float(value)
 
-        futureBalance.update(Text(f"R$ +{str(round(value+balance, 2)).replace(".",",")}", style="green") if (value+balance) >= 0  else Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="red"))
+        futureBalance.update(Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="green") if value >= 0  else Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="red"))
     
-
     @on(Input.Submitted, ".idents")
     def autoCompleteValues(self):
         bank = str(self.app.query_one("#bankChange").value)
         agency = str(self.app.query_one("#agencyChange").value)
         number = str(self.app.query_one("#numberChange").value)
+
         if (bank == '') or (agency == '') or (number == ''):
             return
         
@@ -186,7 +186,10 @@ class ChangeLaunch(Static):
 
             self.changed = True
 
-            self.changeInfo(bank, agency, IsChecked, Typ, number, value, History, f"{EmissionDay}/{EmissionMonth}/{EmissionYear}")
+            self.changeInfo(bank, agency, IsChecked, Typ, number, value, History, f"{str(EmissionDay).zfill(2)}/{str(EmissionMonth).zfill(2)}/{EmissionYear}")
+
+        self.app.query_one("#removeLaunch").display = "block"
+        self.app.query_one("#changeLaunch").styles.width = 38 
     
     @on(SuggestionReady)
     def autoCompletePlaceholder(self):
@@ -209,8 +212,6 @@ class ChangeLaunch(Static):
             value = f"{ValueIntPart}.{str(ValueDecimalPart).zfill(2)}"
 
             self.changePlaceholder(Typ, value, History, f"{EmissionDay}/{EmissionMonth}/{EmissionYear}")
-            self.app.query_one("#removeLaunch").display = "block"
-            self.app.query_one("#changeLaunch").styles.width = 38 
     
     @on(Input.Changed, ".idents")
     def resetValues(self):
@@ -293,13 +294,7 @@ class ChangeLaunch(Static):
             bank = str(bank).zfill(3)
             agency = str(agency).zfill(2)
 
-            situation, oldValueInt, oldValueDecimal = self.app.LAUNCH.getSituationAndValue(bank, agency, number)
-            oldValue = float(f"{oldValueInt}.{oldValueDecimal}")
-
-            if situation == 1:
-                self.app.ACCOUNT.addBalance(bank, agency, oldValue * (-1))
-
-            self.app.LAUNCH.removeLaunch(number, bank, agency)
+            self.app.LAUNCH.removeLaunch(number, bank, agency, self.app.ACCOUNT, self.app.LAUNCH)
             self.app.notify(f"Lançamento {number} removido com sucesso")
             self.changeInfo()
             self.app.query_one(ListLaunch).refreshTable()
@@ -322,9 +317,3 @@ class ChangeLaunch(Static):
         self.app.query_one("#valueChange").placeholder = value
         self.app.query_one("#historyChange").placeholder = history
         self.app.query_one("#emissionDateChange").placeholder = emissionDate
-
-    # def _on_screen_resume(self):
-    #     self.app.query_one("#bankChange").suggester = SuggestFromList(self.app.BANK_NUMBERS)
-    #     self.app.query_one("#agencyChange").suggester = SuggestFromList(self.app.AGENCY_NUMBERS)
-    #     self.app.query_one("#numberChange").suggester = SuggestFromList(list(map(lambda x: x[2], self.app.LAUNCH_NUMBERS)))
-    #     return super()._on_screen_resume()
