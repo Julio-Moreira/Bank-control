@@ -6,25 +6,27 @@ from widgets.Launch.listLaunch import ListLaunch
 from screens.RemoveLaunchScreen import RemoveLaunchScreen
 
 from datetime import datetime
+from rich.text import Text
 
 class ChangeLaunch(Static):
     def compose(self):
         with Vertical(classes="addLaunch"):
-            with HorizontalScroll(classes="lineOneChanged"):
+            with HorizontalScroll(classes="lineZero"):
                 yield Input(placeholder="***", max_length=3, type="integer", id="bankChange", classes="idents")
                 yield Input(placeholder="**", max_length=2, type="integer", id="agencyChange", classes="idents")
-                yield Label(" ")
-                yield Input(placeholder="**", max_length=2, type="text", id="typeChange")
-                yield Input(placeholder="R$ **_***.**", max_length=32, type="number", id="valueChange")
+                yield Static(id="actualBalanceChange", expand=True, renderable="R$ ****,**")
+                yield Static(id="futureBalanceChange", expand=True, renderable="R$ ****,**")
+            with HorizontalScroll(classes="lineOneChanged"):
+                yield Input(placeholder="****", max_length=10, type="integer", id="numberChange", classes="idents")
+                yield Input(placeholder="R$ **_***.**", max_length=18, type="number", id="valueChange")
                 yield Checkbox(id="checkChange")
             with HorizontalScroll(classes="lineTwoChanged"):
-                yield Input(placeholder="****", max_length=10, type="integer", id="numberChange", classes="idents")
-                yield Label(" ")
+                yield Input(placeholder="**", max_length=2, type="text", id="typeChange")
                 yield Input(placeholder=":", type="text", max_length=30, id="historyChange")
                 yield Input(placeholder="**/**/**", max_length=8, type="text", id="emissionDateChange")
             with HorizontalScroll(classes="lineTreeChanged"):
+                yield Button("Alterar", id="changeLaunch")
                 yield Button("[red bold] X [/]", id="removeLaunch")
-
 
     def _on_mount(self):
         bank = self.app.query_one("#bankChange")
@@ -36,7 +38,11 @@ class ChangeLaunch(Static):
         history = self.app.query_one("#historyChange")
         emissionDate = self.app.query_one("#emissionDateChange")
         remove = self.app.query_one("#removeLaunch")
+        actualBalance = self.app.query_one("#actualBalanceChange")
+        futureBalance = self.app.query_one("#futureBalanceChange")
 
+        actualBalance.border_title = "Saldo atual"
+        futureBalance.border_title = "Saldo futuro"
         bank.border_title = "Banco"
         agency.border_title = "Ag"
         check.border_title = ":heavy_check_mark:"
@@ -52,6 +58,7 @@ class ChangeLaunch(Static):
         remove.display = "none"
         self.changed = False
 
+    @on(Button.Pressed, "#changeLaunch")
     @on(Input.Submitted)
     def change(self):
         bank, agency, check, typ, number, value, history, emissionDate = self.getInfo()
@@ -113,6 +120,50 @@ class ChangeLaunch(Static):
         self.changeInfo()
         self.changePlaceholder()
 
+    @on(Input.Changed, ".idents")
+    def bankOrAgencyMod(self):
+        bank = str(self.app.query_one("#bankChange").value)
+        agency = self.app.query_one("#agencyChange").value    
+        actualBalance = self.app.query_one("#actualBalanceChange")
+        
+        if (bank == '') or (agency == ''):
+            actualBalance.update("R$ ****,**")
+            return
+        
+        bank = bank.zfill(3)
+
+        if (not self.validateBank(bank)) or (not self.validateAgency(agency)) or ((bank, agency) not in self.app.NUMBERS):
+            return
+        
+        balanceIntPart, balanceDecimalPart = self.app.ACCOUNT.getBalance(bank, agency)
+        actualBalance.update(f"R$ {balanceIntPart},{balanceDecimalPart:02d}")
+
+    @on(Input.Changed, "#valueChange")
+    def valueMod(self):
+        bank = str(self.app.query_one("#bankChange").value).zfill(3)
+        agency = self.app.query_one("#agencyChange").value
+        value = (self.app.query_one("#valueChange").value)
+        futureBalance = self.app.query_one("#futureBalanceChange")
+        
+        if value == '':
+            futureBalance.update("R$ ****,**")
+            return
+        
+        if (not self.validateBank(bank)) or (not self.validateAgency(agency)) or ((bank, agency) not in self.app.NUMBERS):
+            return
+        
+        try:
+            float(value)
+        except ValueError:
+            return
+        
+        balanceIntPart, balanceDecimalPart = self.app.ACCOUNT.getBalance(bank, agency)
+        balance = float(f"{balanceIntPart}.{balanceDecimalPart:02d}")
+        value = float(value)
+
+        futureBalance.update(Text(f"R$ +{str(round(value+balance, 2)).replace(".",",")}", style="green") if (value+balance) >= 0  else Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="red"))
+    
+
     @on(Input.Submitted, ".idents")
     def autoCompleteValues(self):
         bank = str(self.app.query_one("#bankChange").value)
@@ -159,6 +210,7 @@ class ChangeLaunch(Static):
 
             self.changePlaceholder(Typ, value, History, f"{EmissionDay}/{EmissionMonth}/{EmissionYear}")
             self.app.query_one("#removeLaunch").display = "block"
+            self.app.query_one("#changeLaunch").styles.width = 38 
     
     @on(Input.Changed, ".idents")
     def resetValues(self):
@@ -167,6 +219,7 @@ class ChangeLaunch(Static):
         number = str(self.app.query_one("#numberChange").value)
         self.changePlaceholder()    
         self.app.query_one("#removeLaunch").display = "none"
+        self.app.query_one("#changeLaunch").styles.width = 77 
 
         if self.changed:
             self.changeInfo(agency=f"{agency}", bank=f"{bank}", number=f"{number}")

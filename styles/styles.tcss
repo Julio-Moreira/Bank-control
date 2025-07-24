@@ -63,7 +63,7 @@ LoadingIndicator{
     text-align: left;
 }
 
-ExitScreen, RemoveAccountScreen, RemoveLaunchScreen {
+ExitScreen, RemoveAccountScreen, RemoveLaunchScreen, TicConfirmScreen {
     align: center middle;
 }
 
@@ -76,6 +76,32 @@ ExitScreen, RemoveAccountScreen, RemoveLaunchScreen {
     height: 10;
     border: double $secondary 80%;
     background: $surface;
+}
+
+#dialogTic {
+    padding: 0 1;
+    width: 60;
+    height: 12;
+    border: double $secondary 80%;
+    background: $surface;
+}
+
+#confirmMsg {
+    width: 100%;
+    align: center middle;
+}
+
+#selectTic {
+    border: none;   
+    width: 100%;
+}
+
+#concludeTic {
+    width: 50%;
+}
+
+#cancelTic {
+    width: 50%;
 }
 
 #question, #questionl {

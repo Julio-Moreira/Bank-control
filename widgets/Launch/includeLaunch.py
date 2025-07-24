@@ -1,30 +1,36 @@
 from textual import on
-from textual.widgets import Static, Input, Checkbox, Label
+from textual.widgets import Static, Input, Checkbox, Label, Button
 from textual.containers import HorizontalScroll, Vertical
 from textual.suggester import SuggestFromList
 from widgets.Launch.listLaunch import ListLaunch
 from screens.AccountScreen import AccountScreen
 
 from datetime import datetime
+from rich.text import Text
 
 
 class IncludeLaunch(Static):
     def compose(self):
         with Vertical(classes="addLaunch"):
+            with HorizontalScroll(classes="lineZero"):
+                yield Input(placeholder="***", max_length=3, type="integer", id="bank", classes="balanceMod")
+                yield Input(placeholder="**", max_length=2, type="integer", id="agencyLn", classes="balanceMod")
+                yield Static(id="actualBalance", expand=True, renderable="R$ ****,**")
+                yield Static(id="futureBalance", expand=True, renderable="R$ ****,**")
             with HorizontalScroll(classes="lineOne"):
-                yield Input(placeholder="***", max_length=3, type="integer", id="bank")
-                yield Input(placeholder="**", max_length=2, type="integer", id="agencyLn")
-                yield Label(" ")
-                yield Input(placeholder="**", max_length=2, type="text", id="type")
-                yield Input(placeholder="R$ **_***.**", max_length=32, type="number", id="value")
-            with HorizontalScroll(classes="lineTwo"):
                 yield Input(placeholder="****", max_length=10, type="integer", id="number")
-                yield Label(" ")
+                yield Input(placeholder="R$ **_***.**", max_length=18, type="number", id="value")
+            with HorizontalScroll(classes="lineTwo"):
+                yield Input(placeholder="**", max_length=2, type="text", id="type")
                 yield Input(placeholder=":", type="text", max_length=30, id="history")
                 yield Input(placeholder="**/**/**", max_length=8, type="text", id="emissionDate")
+            with HorizontalScroll(classes="lineTree"):
+                yield Button("Adicionar", id="addBtnLaunch")
 
     def _on_mount(self):
         bank = self.app.query_one("#bank")
+        actualBalance = self.app.query_one("#actualBalance")
+        futureBalance = self.app.query_one("#futureBalance")
         agency = self.app.query_one("#agencyLn")
         typeLn = self.app.query_one("#type")
         number = self.app.query_one("#number")
@@ -33,6 +39,8 @@ class IncludeLaunch(Static):
         emissionDate = self.app.query_one("#emissionDate")
 
         bank.border_title = "Banco"
+        actualBalance.border_title = "Saldo atual"
+        futureBalance.border_title = "Saldo futuro"
         agency.border_title = "Ag"
         typeLn.border_title = "Tp"
         number.border_title = "Número"
@@ -43,6 +51,7 @@ class IncludeLaunch(Static):
         bank.suggester = SuggestFromList(self.app.BANK_NUMBERS)
         agency.suggester = SuggestFromList(self.app.AGENCY_NUMBERS)
 
+    @on(Button.Pressed, "#addBtnLaunch")
     @on(Input.Submitted)
     def add(self):
         bank, agency, typ, number, value, history, emissionDate = self.getInfo()
@@ -103,6 +112,50 @@ class IncludeLaunch(Static):
         self.app.query_one(ListLaunch).refreshTable()
         self.app.LAUNCH_NUMBERS.append((bank, agency, number))
         self.changeInfo()
+
+    @on(Input.Changed, ".balanceMod")
+    def bankOrAgencyMod(self):
+        bank = str(self.app.query_one("#bank").value)
+        agency = self.app.query_one("#agencyLn").value    
+        actualBalance = self.app.query_one("#actualBalance")
+        
+        if (bank == '') or (agency == ''):
+            actualBalance.update("R$ ****,**")
+            return
+        
+        bank = bank.zfill(3)
+
+        if (not self.validateBank(bank)) or (not self.validateAgency(agency)) or ((bank, agency) not in self.app.NUMBERS):
+            return
+        
+        balanceIntPart, balanceDecimalPart = self.app.ACCOUNT.getBalance(bank, agency)
+        actualBalance.update(f"R$ {balanceIntPart},{balanceDecimalPart:02d}")
+
+    @on(Input.Changed, "#value")
+    def valueMod(self):
+        bank = str(self.app.query_one("#bank").value).zfill(3)
+        agency = self.app.query_one("#agencyLn").value
+        value = (self.app.query_one("#value").value)
+        futureBalance = self.app.query_one("#futureBalance")
+        
+        if value == '':
+            futureBalance.update("R$ ****,**")
+            return
+        
+        if (not self.validateBank(bank)) or (not self.validateAgency(agency)) or ((bank, agency) not in self.app.NUMBERS):
+            return
+        
+        try:
+            float(value)
+        except ValueError:
+            return
+        
+        balanceIntPart, balanceDecimalPart = self.app.ACCOUNT.getBalance(bank, agency)
+        balance = float(f"{balanceIntPart}.{balanceDecimalPart:02d}")
+        value = float(value)
+
+        futureBalance = self.app.query_one("#futureBalance")
+        futureBalance.update(Text(f"R$ +{str(round(value+balance, 2)).replace(".",",")}", style="green") if (value+balance) >= 0  else Text(f"R$ {str(round(value+balance, 2)).replace(".",",")}", style="red"))
     
     def validateBank(self, bank):
         return bank.isdigit() and len(bank) == 3
