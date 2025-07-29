@@ -1,7 +1,6 @@
 from textual.screen import Screen
 from textual.widgets import Header, Footer, Label
 from textual.containers import Horizontal
-from widgets.SideBar import SideBar
 
 
 class HistoryScreen(Screen):

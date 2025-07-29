@@ -6,7 +6,6 @@ from widgets.Launch.includeLaunch import IncludeLaunch
 from textual.message import Message
 
 
-from widgets.SideBar import SideBar
 import widgets.Launch.changeLaunch, widgets.Launch.includeLaunch, widgets.Launch.listLaunch, widgets.Launch.ticLaunch
 
 class LaunchScreen(Screen):

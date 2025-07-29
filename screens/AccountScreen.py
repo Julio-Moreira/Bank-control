@@ -5,7 +5,6 @@ from textual.containers import Horizontal, HorizontalScroll
 from textual.suggester import SuggestFromList, SuggestionReady
 from rich.text import Text
 
-from widgets.SideBar import SideBar
 from widgets.ChangeAccount import ChangeAccount
 from widgets.Conference import Conference
 from screens.RemoveAccountScreen import RemoveAccountScreen
