@@ -1,0 +1,27 @@
+RelatoryScreen {
+    align: center top;
+}
+
+#mainRelatory {
+    align: center top;
+    height: auto;
+    width: 80%;
+}
+
+#period {
+    margin-top: 1;
+}
+
+.sectionRelatory {
+    align: center top;
+    border: round $secondary;
+    border-title-align: left;
+    background: $boost;
+    width: 100%;
+}
+
+.relatoryButton {
+    width: 50%;
+    border: round $secondary;
+    background: $boost;
+}

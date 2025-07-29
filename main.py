@@ -18,14 +18,14 @@ from models.Account import Account
 from models.Launch import Launch
 
 
-
 class BankControlApp(App):
     TITLE = "Controle bancário"
     COMMAND_PALETTE_BINDING = "ctrl+a"
     CSS_PATH = [
         "styles/styles.tcss", 
         "styles/account.tcss",
-        "styles/launch.tcss"
+        "styles/launch.tcss",
+        "styles/relatory.tcss"
     ]
     BINDINGS = [
         ("ctrl+s", "app.push_screen('ExitScreen')", "Sair"),
